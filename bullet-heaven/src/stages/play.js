@@ -1,3 +1,4 @@
+// src/stages/play.js
 import * as me from 'melonjs';
 import { GameData } from "../gameData.js";
 import XPHUD from "../renderables/xpHud.js";
@@ -14,7 +15,11 @@ class PlayScreen extends me.Stage {
     _pauseKeyPressed = false;
 
     onResetEvent() {
+        // sempre que começar/der reset na fase, zera o XP e os níveis
         GameData.xp = 0;
+        GameData.weaponLevels.pistol = 1;
+        GameData.weaponLevels.rifle = 1;
+        GameData.weaponLevels.shotgun = 1;
 
         me.game.world.backgroundColor.parseCSS("#707B64");
         const bgImage = me.loader.getImage("map-01");
@@ -49,12 +54,14 @@ class PlayScreen extends me.Stage {
         this.player = new PlayerEntity();
         me.game.world.addChild(this.player, 1);
 
+        // HUD das armas
         me.game.world.addChild(new WeaponHudContainer(this.player), 99);
 
         this.enemyManager = new EnemyManager();
         this.enemyManager.createEnemies();
         me.game.world.addChild(this.enemyManager, 2);
 
+        // HUD de XP / níveis
         this.xpHud = new XPHUD();
         me.game.world.addChild(this.xpHud, 9999);
 
